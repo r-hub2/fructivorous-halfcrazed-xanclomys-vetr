@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2023 Brodie Gaslam
+Copyright (C) Brodie Gaslam
 
 This file is part of "vetr - Trust, but Verify"
 
@@ -343,7 +343,7 @@ int VALC_parse_recurse(
     if(is_one_dot) {
       // A true `.`, sub with expression to validate, and no further subs.
       lang = arg_tag;   // always a symbol
-      lang2 = arg_lang; // could be language, or any R object (w/ some work)
+      lang2 = arg_lang; // could be language, or any R object really
     } else {
       // Expand symbols bound to language into that language (e.g. INT.1, etc.).
       lang = PROTECT(VALC_sub_symbol(lang, set, track_hash, arg_tag)); prt++;
@@ -380,8 +380,9 @@ int VALC_parse_recurse(
   if(call_type != 1 && call_type != 2) token = 1;
   else if(length(lang) != 3) {
     error(
-      "Top-level call to %s should have two arguments but does not:\n\n%s",
-      call_type == 1 ? "&&" : "||", ALIKEC_deparse_chr(lang, -1, set)
+      "Top-level call to %s should have 2 arguments but has %d:\n\n%s",
+      call_type == 1 ? "&&" : "||", length(lang) - 1,
+      ALIKEC_deparse_chr(lang, -1, set)
     );
   } else {
     // A vetr expression: pop off the &&/|| symbol and recurse through rest
